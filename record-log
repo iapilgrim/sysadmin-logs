@@ -20,5 +20,5 @@ fi
 #
 #  POST, and keep curls exit-code.
 #
-curl -k -X POST http://localhost:9977/ -d msg="$*" user=$USER
+curl -k -X POST http://localhost:9977/ -d msg="$*" -d user="$USER"
 exit $?
