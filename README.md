@@ -49,25 +49,26 @@ Installation
 
 Clone the repository.
 
-   $ cd git
-   $ git clone https://github.com/skx/sysadmin-logs
-   $ cd sysadmin-logs
+     $ cd git
+     $ git clone https://github.com/skx/sysadmin-logs
+     $ cd sysadmin-logs
 
 Initialize the submodule
 
-   $ git submodule fetch
+     $ git submodule fetch
 
 Start the server:
 
-   $ node server.js
+     $ node server.js
 
 Now you've done that you can submit data from any host like so:
 
-   $ ./record-log "This is a test"
+     $ ./record-log "This is a test"
 
 And view entries via:
 
-   $ ./get-recent
+     $ ./get-recent
+
 
 Steve
 --
