@@ -55,7 +55,8 @@ Clone the repository.
 
 Initialize the submodule
 
-     $ git submodule fetch
+     $ git submodule init
+     $ git submodule update
 
 Start the server:
 
