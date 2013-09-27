@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+#  Ensure we got a message
+#
+if [ -z "$1" ]; then
+   echo "Usage: $0 msg .."
+   exit 1
+fi
+
+#
+#  POST
+#
+curl -k -X POST http://localhost:9977/ -d msg="$*"
+exit
