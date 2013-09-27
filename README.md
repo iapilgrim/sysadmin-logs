@@ -23,14 +23,17 @@ Assumptions
 
 * The recorded data must be sent off-host.
 * The recorded data should only be visible to the host that submitted it
+   * Because it is easy to imagine some hosts might have different local users, and they shouldn't be able to spy on the work you're doing on hosts they don't control.
    * But a suitable privileged admin-host could view all data.
 
 The client applications `record-log` and `recent-events` should be
 written in a portable fashion, such that they work with no other
-applications present.
+applications present.  In this proof of concept hack we use `curl`.
 
 To avoid firewall complexity I would propose sending the data via
-HTTP-POST requests.  Ideally SSL will be used to prevent sniffing.
+HTTP-POST requests.
+
+In the future SSL will be used to prevent sniffing.
 
 
 Implementation
@@ -39,22 +42,23 @@ Implementation
 The implementation can be divided into three parts:
 
 * A central server to receive submitted events.
-   * And also retrieve recent entries.
-* A client to submit an arbitrary record.
+   * And also allow a host to retrieve entries it has made in the past.
+* A client to submit an arbitrary new "work-log" record.
 * A client to retrieve recent events from this host.
 
 
 Installation
 ------------
 
-Clone the repository.
+Providing you have a redis-server running on localhost and a working node.js installation then you can get started quickly.
 
-     $ cd git
+Clone the repository:
+
      $ git clone https://github.com/skx/sysadmin-logs
+
+Initialize the submodule:
+
      $ cd sysadmin-logs
-
-Initialize the submodule
-
      $ git submodule init
      $ git submodule update
 
@@ -69,6 +73,12 @@ Now you've done that you can submit data from any host like so:
 And view entries via:
 
      $ ./get-recent
+
+
+TODO
+----
+
+* The clients should allow a hostname to be configured "notes.example.org", for example.
 
 
 Steve
