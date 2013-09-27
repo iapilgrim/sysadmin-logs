@@ -1,3 +1,15 @@
 #!/bin/sh
 
+#
+#  Ensure we have curl
+#
+if ( ! which curl >/dev/null 2>/dev/null ); then
+    echo "Failed to find 'curl' executable"
+    exit 1
+fi
+
+#
+#  Make the request, and exit with the exit-code from curl.
+#
 curl http://localhost:9977/recent
+exit $?

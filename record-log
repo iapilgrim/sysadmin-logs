@@ -1,5 +1,14 @@
 #!/bin/sh
 
+
+#
+#  Ensure we have curl
+#
+if ( ! which curl >/dev/null 2>/dev/null ); then
+    echo "Failed to find 'curl' executable"
+    exit 1
+fi
+
 #
 #  Ensure we got a message
 #
@@ -9,7 +18,7 @@ if [ -z "$1" ]; then
 fi
 
 #
-#  POST
+#  POST, and keep curls exit-code.
 #
 curl -k -X POST http://localhost:9977/ -d msg="$*"
-exit
+exit $?
