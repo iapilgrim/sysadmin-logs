@@ -1,3 +1,3 @@
 #!/bin/sh
 
-curl -v http://localhost:9977/recent
+curl http://localhost:9977/recent
