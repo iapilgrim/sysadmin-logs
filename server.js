@@ -5,20 +5,20 @@
 
 
 var http      = require('http')
-var qs        = require( "querystring" );
+var qs        = require('querystring');
 var fs        = require('fs');
 var redis_lib = null;
 
 
 //
 //  This code is nasty because I want to allow the service to run without
-// run without the user having to update the environmental variable NODE_PATH,
+// the user having to update the environmental variable NODE_PATH,
 // and setting that in code doesn't work.
 //
 //  The intention is that the user can install the required dependencies
 // either via:
 //
-//    1. `npm install`
+//    1. `npm install redis`
 //
 //    2.  Using the git submodules.
 //
@@ -43,7 +43,8 @@ var redis = redis_lib.createClient();
 
 
 /*
- * Trivial server for receiving POST requests.
+ * Trivial server for receiving POST requests to store work-logs,
+ * and later retrieve them in-order.
  */
 var server = http.createServer(function (request, response) {
 
@@ -78,7 +79,7 @@ var server = http.createServer(function (request, response) {
             //
             msg.forEach(function(j){
                 var x = JSON.parse( j );
-                response.write( x['peer'] + " " + x['date'] + "\n" + x['msg'] + "\n" );
+                response.write( x['peer'] + " " + x['date'] + "\n" + x['user'] + ":" + x['msg'] + "\n" );
             });
             response.end();
 
@@ -95,10 +96,15 @@ var server = http.createServer(function (request, response) {
             var src  = request.connection.remoteAddress;
             var body = qs.parse(data);
             var msg  = body['msg'];
+            var user = body['user'] || "unknown";
 
-            var hash = { 'msg':  msg,
-                         'date': new Date(),
-                         'peer': src };
+            //
+            //  The object we'll store in redis, as JSON.
+            //
+            var hash = { 'msg': msg,
+                        'user': user,
+                        'date': new Date(),
+                        'peer': src };
 
             //
             //  Log in a rotating buffer for this host.
