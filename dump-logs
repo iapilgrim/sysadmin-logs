@@ -1,0 +1,129 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+dump-logs - Show all logged messages, regardless of the host.
+
+=head1 SYNOPSIS
+
+  dump-logs [filter]
+
+=cut
+
+=head1 DESCRIPTION
+
+This script connect to the redis-server and read all entries that have
+been submitted by C<log-message>.  Each entry will be dumped to the console.
+
+If an optional filter has been specified then only records which match
+the filter will be displayed.
+
+B<NOTE>: The filter can be used ot match on any field (author, message,
+IP, date, etc).
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+use strict;
+use warnings;
+
+
+#
+#  Load the perl-modules we require.
+#
+loadModules();
+
+#
+#  Do we have a filter?
+#
+my $filter = shift;
+
+
+#
+#  Connect to redis, and retrieve all entries.
+#
+my $client = Redis->new();
+my @global = $client->lrange( "messages", 0, -1 );
+
+#
+#  Process each entry.
+#
+foreach my $log (@global)
+{
+
+    #
+    #  Decode the entry from the JSON-encoded Hash.
+    #
+    my $obj = decode_json($log);
+
+    #
+    #  The message needs to be "formatted".
+    #
+    my $text = <<EOF;
+$obj->{'peer'}  $obj->{'user'}  $obj->{'date'}
+\t$obj->{'msg'}
+
+EOF
+
+    #
+    #  If we've been given a filter on the command-line
+    # then skip this entry unless it matches.
+    #
+    next if ( $filter && $text !~ /$filter/i );
+
+    #
+    #  Show the entry.
+    #
+    print $text;
+}
+
+
+
+=begin doc
+
+Dynamically load the modules we require, such that the user
+will have a graceful failure.
+
+=end doc
+
+=cut
+
+sub loadModules
+{
+    foreach my $module (qw! Redis JSON !)
+    {
+        my $str = "use $module;";
+        eval($str);
+
+        if ($@)
+        {
+            print <<EOF;
+Attempting to use the module $module failed.
+
+If you're on a Debian GNU/Linux system you can install the missing dependency
+with:
+
+    apt-get install libjson-perl libredis-perl
+EOF
+            exit(0);
+        }
+    }
+}
