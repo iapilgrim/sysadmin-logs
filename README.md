@@ -59,7 +59,7 @@ Clone the repository:
 
      $ git clone https://github.com/skx/sysadmin-logs
 
-Initialize the submodule:
+Initialize the submodule, which will pull in the redis-client library for node.js:
 
      $ cd sysadmin-logs
      $ git submodule init
@@ -69,7 +69,7 @@ Start the server:
 
      $ node server.js
 
-Now you've done that you can submit data from any host like so:
+Now you've done that you can submit data from any host which can connect to the server, like so:
 
      $ ./record-log "This is a test"
 
