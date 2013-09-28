@@ -116,6 +116,12 @@ var server = http.createServer(function (request, response) {
             //
             redis.rpush( "messages", JSON.stringify( hash ) );
 
+            //
+            //  Allow us to keep track of all the hosts
+            // that have ever sent us a message.
+            //
+            redis.sadd( "known-hosts", src );
+
             console.log( "DATA:" + JSON.stringify(hash) );
             response.writeHead(200, {'content-type': 'application/json'});
             response.end('{"result":"OK"}');
