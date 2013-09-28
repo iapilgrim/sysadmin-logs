@@ -49,6 +49,19 @@ The implementation can be divided into three parts:
 * A client to retrieve recent events from this host: `get-recent`.
    * Using only `curl` to keep things portable.
 
+It is assumed that the HTTP-server will be accessible to all hosts
+that wish to submit logs, but otherwise will be firewalled sanely.
+
+The redis-server used for storage shouldn't be externally visible
+as any user who can connect to it can read all submitted data.
+
+There is a utility `dump-logs` which will connect to the redis
+server on `localhost` to dump all submitted events, this is included
+as an example.  It might be beneficial in the future to present
+a simple system to allow these events to be viewed by admin-staff
+or similar.
+
+
 
 Installation
 ------------
