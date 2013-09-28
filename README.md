@@ -75,10 +75,18 @@ And view entries via:
      $ ./get-recent
 
 
-TODO
-----
 
-* The clients should allow a hostname to be configured "notes.example.org", for example.
+Server Configuration
+--------------------
+
+The two scripts `get-recent` and `record-log` will default to using the server on localhost.  This is unlikely to be useful in production.
+
+To specify a remote host to use please run:
+
+      # echo server=logs.example.com  > /etc/sysadmin-logs.conf
+
+
+**NOTE**: The port is hard-wired as 9977 currently.
 
 
 Steve

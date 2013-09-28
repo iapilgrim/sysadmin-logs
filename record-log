@@ -2,6 +2,20 @@
 
 
 #
+# Read the config-file, if it exists.
+#
+if [ -e /etc/sysadmin-logs.conf ]; then
+   . /etc/sysadmin-logs.conf
+fi
+
+#
+#  Get the server name
+#
+if [ -z "$server" ]; then
+    server=localhost
+fi
+
+#
 #  Ensure we have curl
 #
 if ( ! which curl >/dev/null 2>/dev/null ); then
@@ -20,5 +34,5 @@ fi
 #
 #  POST, and keep curls exit-code.
 #
-curl -k -X POST http://localhost:9977/ -d msg="$*" -d user="$USER"
+curl -k -X POST http://${server}:9977/ -d msg="$*" -d user="$USER"
 exit $?
