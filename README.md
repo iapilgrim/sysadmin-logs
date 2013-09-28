@@ -43,8 +43,11 @@ The implementation can be divided into three parts:
 
 * A central server to receive submitted events.
    * And also allow a host to retrieve entries it has made in the past.
-* A client to submit an arbitrary new "work-log" record.
-* A client to retrieve recent events from this host.
+   * This storage uses [redis](http://redis.io/)
+* A client to submit an arbitrary new "work-log" record: `record-log`.
+   * Using only `curl`, to keep things portable.
+* A client to retrieve recent events from this host: `get-recent`.
+   * Using only `curl` to keep things portable.
 
 
 Installation
